@@ -1,33 +1,29 @@
-#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-struct blockmeta {
-  size_t size;
-  // size_t pre_size;
-  struct blockmeta * next;
-  struct blockmeta * prev;
+#include <stdbool.h>
+struct blockmeta{
+    size_t size;
+    struct blockmeta * next;
+    struct blockmeta * prev;
 };
 typedef struct blockmeta Blockmeta;
 #define META_SIZE sizeof(Blockmeta)
-//void printFreeList();
-void * reuse_block(size_t size,
-                   Blockmeta * p,
-                   Blockmeta ** first_free_block,
-                   Blockmeta ** last_free_block);
-void * allocate_block(size_t size, int sbrk_lock);
-void insert_block(Blockmeta * p, Blockmeta ** first_free_block, Blockmeta ** last_free_block);
-void delete_block(Blockmeta * p,
-                  Blockmeta ** first_free_block,
-                  Blockmeta ** last_free_block);
-Blockmeta * get_sliced_block(Blockmeta * blockPtr, size_t size);
-void * bf_malloc(size_t size,
-                 Blockmeta ** first_free_block,
-                 Blockmeta ** last_free_block,
-                 int sbrk_lock);
-void bf_free(void * ptr, Blockmeta ** first_free_block, Blockmeta ** last_free_block);
-void check_merge(Blockmeta * p, Blockmeta ** first_free_block, Blockmeta ** last_free_block);
 
+// Hw default methods
+void * ff_malloc(size_t size);
+void ff_free(void * ptr);
+void * bf_malloc(size_t size, Blockmeta ** first_free_block, int sbrk_lock);
+void bf_free(void * ptr, Blockmeta ** first_free_block);
+unsigned long get_data_segment_size();
+unsigned long get_data_segment_free_space_size();
+
+// Jerry's methods
+void * use_existing_block(size_t size, Blockmeta * p);
+void * allocate_block(size_t size, int sbrk_lock);
+ void insert_block(Blockmeta * p, Blockmeta ** first_free_block);
+void delete_block(Blockmeta * p, Blockmeta ** first_free_block);
+Blockmeta * get_sliced_block(Blockmeta * blockPtr, size_t size);
+void check_merge(Blockmeta * p, Blockmeta ** first_free_block);
 
 void * ts_malloc_lock(size_t size);
 void ts_free_lock(void * ptr);
