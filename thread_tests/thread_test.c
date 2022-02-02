@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
   int *start, *end, *tgt_start, *tgt_end;
   int fail = 0;
   for (i=0; i < NUM_THREADS * NUM_ITEMS; i++) {
+    printf("i = %d \n", i);
     if (malloc_items[i].free == 1) continue;
     start = malloc_items[i].address;
     end   = start + (malloc_items[i].bytes / sizeof(int));
