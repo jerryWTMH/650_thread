@@ -4,7 +4,6 @@
 
 struct blockmeta {
   size_t size;
-  int isfree;
   // size_t pre_size;
   struct blockmeta * next;
   struct blockmeta * prev;
